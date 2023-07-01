@@ -27,7 +27,6 @@ def api():
     ]
     )
     if completion.choices[0].message!=None:
-        print(completion.choices[0].message["content"])
         return completion.choices[0].message
     else :
         return 'Failed to Generate response!'
