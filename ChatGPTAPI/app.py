@@ -1,8 +1,14 @@
 from flask import Flask, render_template, request
 import openai
+import os
 app = Flask(__name__)
 # Set up OpenAI API credentials
-openai.api_key = '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'
+from dotenv import load_dotenv
+# Load the environment variables from the .env file
+load_dotenv()
+# Get the API key from the environment variables
+api_key = os.getenv("API_KEY")
+openai.api_key = api_key
 # Define the default route to return the index.html file
 @app.route("/")
 def index():
@@ -21,6 +27,7 @@ def api():
     ]
     )
     if completion.choices[0].message!=None:
+        print(completion.choices[0].message["content"])
         return completion.choices[0].message
     else :
         return 'Failed to Generate response!'

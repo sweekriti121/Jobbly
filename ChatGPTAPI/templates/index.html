@@ -43,33 +43,50 @@
     }
 
     function appendBotMessage(message) {
-      const delay = 20; // Delay between each character (adjust as needed)
-      const messageDiv = document.createElement("div");
-      messageDiv.classList.add("mt-3", "p-3", "rounded", "bot-message");
-      const contentDiv = document.createElement("p");
-      const botIcon = document.createElement("img");
-      botIcon.src = "{{ url_for('static', filename='images/gpt.jpg') }}";
-      botIcon.classList.add("bot-icon");
+  const delay = 20; // Delay between each character (adjust as needed)
+  const messageDiv = document.createElement("div");
+  messageDiv.classList.add("mt-3", "p-3", "rounded", "bot-message");
+  const contentDiv = document.createElement("p");
+  const botIcon = document.createElement("img");
+  botIcon.src = "{{ url_for('static', filename='images/gpt.jpg') }}";
+  botIcon.classList.add("bot-icon");
 
-      let content = '';
-      let index = 0;
+  let content = '';
+  let index = 0;
 
-      const typingInterval = setInterval(() => {
-        content += message.charAt(index);
-        contentDiv.innerText = content;
-        index++;
+  const typingInterval = setInterval(() => {
+    content += message.charAt(index);
+    contentDiv.innerText = content;
+    index++;
 
-        if (index >= message.length) {
-          clearInterval(typingInterval);
-        }
-      }, delay);
-
-      messageDiv.appendChild(botIcon);
-      messageDiv.appendChild(contentDiv);
-      const chatBox = document.querySelector(".chat-box");
-      chatBox.appendChild(messageDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
+    if (index >= message.length) {
+      clearInterval(typingInterval);
+      contentDiv.innerHTML = createLinksFromLines(contentDiv.innerHTML);
     }
+  }, delay);
+
+  messageDiv.appendChild(botIcon);
+  messageDiv.appendChild(contentDiv);
+  const chatBox = document.querySelector(".chat-box");
+  chatBox.appendChild(messageDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function createLinksFromLines(text) {
+  text = text.replace(/<br>/g, "\n"); // Replace <br> tags with line breaks
+  const lines = text.split("\n");
+  let result = "";
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    const link = document.createElement("a");
+    link.href = `new-page${i + 1}.html`;
+    link.textContent = line;
+    const lineDiv = document.createElement("div");
+    lineDiv.appendChild(link);
+    result += lineDiv.innerHTML + "<br>";
+  }
+  return result;
+}
 
     function sendMessage() {
       const message = document.querySelector("#message-input").value.trim();
