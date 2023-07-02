@@ -46,7 +46,7 @@
   const delay = 20; // Delay between each character (adjust as needed)
   const messageDiv = document.createElement("div");
   messageDiv.classList.add("mt-3", "p-3", "rounded", "bot-message");
-  const contentDiv = document.createElement("p");
+  const contentDiv = document.createElement("div"); // Changed from <p> to <div>
   const botIcon = document.createElement("img");
   botIcon.src = "{{ url_for('static', filename='images/gpt.jpg') }}";
   botIcon.classList.add("bot-icon");
@@ -56,7 +56,7 @@
 
   const typingInterval = setInterval(() => {
     content += message.charAt(index);
-    contentDiv.innerText = content;
+    contentDiv.innerHTML = content; // Changed from innerText to innerHTML
     index++;
 
     if (index >= message.length) {
@@ -71,6 +71,7 @@
   chatBox.appendChild(messageDiv);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
+
 
 function createLinksFromLines(text) {
   text = text.replace(/<br>/g, "\n"); // Replace <br> tags with line breaks
@@ -95,35 +96,36 @@ function createLinksFromLines(text) {
 }
 
 
-    function sendMessage() {
-      const message = document.querySelector("#message-input").value.trim();
+function sendMessage() {
+  const message = document.querySelector("#message-input").value.trim();
 
-      if (message !== "") {
-        appendUserMessage(message);
+  if (message !== "") {
+    appendUserMessage(message);
 
-        fetch("/api", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message })
-        })
-          .then(response => response.json())
-          .then(data => {
-            document.querySelector("#message-input").value = "";
+    fetch("/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message })
+    })
+      .then(response => response.json())
+      .then(data => {
+        document.querySelector("#message-input").value = "";
 
-            const response = data.content;
-            const hasCodeBlock = response.includes("```");
+        const response = data.output; // Get the output message from the JSON response
+        const hasCodeBlock = response.includes("```");
 
-            if (hasCodeBlock) {
-              appendBotMessage(response);
-            } else {
-              appendBotMessage(response);
-            }
-          })
-          .catch(error => console.error(error));
-      }
-    }
+        if (hasCodeBlock) {
+          appendBotMessage(response);
+        } else {
+          appendBotMessage(response);
+        }
+      })
+      .catch(error => console.error(error));
+  }
+}
+
 
     const sendBtn = document.querySelector("#send-btn");
     sendBtn.addEventListener("click", sendMessage);
