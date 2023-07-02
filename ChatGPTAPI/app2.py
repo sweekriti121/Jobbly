@@ -13,12 +13,12 @@ api_key = os.getenv("API_KEY")
 openai.api_key = api_key
 
 # Define the default route to return the index.html file
-@app.route("/")
+@app.route("https://jobbly-65re.onrender.com/")
 def index():
     return "Welcome to the API!"
 
 # Define the /api route to handle POST requests
-@app.route("/api", methods=["POST"])
+@app.route("https://jobbly-65re.onrender.com/api", methods=["POST"])
 def api():
     # Get the message from the POST request
     message = request.json.get("message")
@@ -46,7 +46,7 @@ def api():
     # Return the JSON response
     return jsonify(response)
 
-@app.route("/jobs/links", methods=["POST"])
+@app.route("https://jobbly-65re.onrender.com/jobs/links", methods=["POST"])
 def get_job_links():
     # Get the message from the POST request
     message = request.json.get("message")
@@ -84,7 +84,7 @@ def get_job_links():
 
     return jsonify(job_data)
 
-@app.route("/jobs/skills", methods=["POST"])
+@app.route("https://jobbly-65re.onrender.com/jobs/skills", methods=["POST"])
 def get_job_skills():
     # Get the message from the POST request
     message = request.json.get("message")
@@ -136,7 +136,7 @@ def get_job_skills():
         job_data.append(job_dict)
     return jsonify(job_data)
 
-@app.route("/jobs/salary", methods=["POST"])
+@app.route("https://jobbly-65re.onrender.com/jobs/salary", methods=["POST"])
 def get_job_salary():
     # Get the message from the POST request
     message = request.json.get("message")
@@ -183,7 +183,7 @@ def get_job_salary():
         job_data.append(job_dict)
     return jsonify(job_data)
 
-@app.route("/resources/books", methods=["POST"])
+@app.route("https://jobbly-65re.onrender.com/resources/books", methods=["POST"])
 def get_resource_books():
     # Get the message from the POST request
     message = request.json.get("message")
@@ -236,7 +236,7 @@ def get_resource_books():
 
     return jsonify(job_data)
 
-@app.route("/resources/freecourses", methods=["POST"])
+@app.route("https://jobbly-65re.onrender.com/resources/freecourses", methods=["POST"])
 def get_resources_free():
     # Get the message from the POST request
     message = request.json.get("message")
@@ -276,7 +276,7 @@ def get_resources_free():
 
     return jsonify(job_data)
 
-@app.route("/resources/paidcourses", methods=["POST"])
+@app.route("https://jobbly-65re.onrender.com/resources/paidcourses", methods=["POST"])
 def get_resources_paid():
     # Get the message from the POST request
     message = request.json.get("message")
@@ -306,4 +306,5 @@ def get_resources_paid():
     return jsonify(udemy_links)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0',port=port)
