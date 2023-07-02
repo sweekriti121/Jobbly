@@ -19,7 +19,7 @@ def api():
     # Get the message from the POST request
     message = request.json.get("message")
     # Send the message to OpenAI's API and receive the response
-    augmented_message = f"{message} - recommend 6 jobs for these skills and give only 1 line description for each in a new line"
+    augmented_message = f"{message} - recommend 6 jobs for these skills without any description only the job titles and each in a new line" 
     completion = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
     messages=[

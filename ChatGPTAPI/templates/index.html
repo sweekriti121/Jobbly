@@ -79,14 +79,21 @@ function createLinksFromLines(text) {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
     const link = document.createElement("a");
-    link.href = `new-page${i + 1}.html`;
     link.textContent = line;
     const lineDiv = document.createElement("div");
     lineDiv.appendChild(link);
+
+    // Generate the URL dynamically based on the line content
+    const query = line.toLowerCase().replace(/ /g, "+");
+    const url = `https://in.indeed.com/jobs?q=${query}`;
+    link.href = url;
+    link.target = "_blank";
+
     result += lineDiv.innerHTML + "<br>";
   }
   return result;
 }
+
 
     function sendMessage() {
       const message = document.querySelector("#message-input").value.trim();
